@@ -1,0 +1,7 @@
+const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const menuBtn=document.getElementById('menuBtn'),navMenu=document.getElementById('navMenu'),navbar=document.getElementById('navbar');
+menuBtn?.addEventListener('click',()=>{const show=navMenu.classList.toggle('show');menuBtn.setAttribute('aria-expanded',show?'true':'false')});
+document.querySelectorAll('#navMenu a').forEach(a=>a.addEventListener('click',()=>{navMenu.classList.remove('show');menuBtn?.setAttribute('aria-expanded','false')}));
+const sections=[...document.querySelectorAll('main section[id]')],links=[...document.querySelectorAll('#navMenu a')],progress=document.querySelector('.progress span');
+addEventListener('scroll',()=>{const max=document.documentElement.scrollHeight-innerHeight;if(progress)progress.style.transform=`scaleX(${max>0?scrollY/max:0})`;navbar?.classList.toggle('scrolled',scrollY>25);let current='home';sections.forEach(s=>{if(scrollY>=s.offsetTop-180)current=s.id});links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')===`#${current}`))},{passive:true});
+if(!reduceMotion){const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}}),{threshold:.12});document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=`${(i%4)*70}ms`;observer.observe(el)})}
